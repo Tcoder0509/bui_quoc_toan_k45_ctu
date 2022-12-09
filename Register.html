@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>LAPTOP STORE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="images/logo.jpg" />
+    <link href="styles/register.css" rel="stylesheet" type="text/css" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Colo Shop Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+
+    <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+    <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/animate.css">
+    <link rel="stylesheet" type="text/css" href="styles/main_styles.css">
+    <link rel="stylesheet" type="text/css" href="styles/responsive.css">
+</head>
+
+<body>
+    <div class="super_container">
+        <header class="header trans_300">
+
+        <!-- Top Navigation -->
+
+            <div class="top_nav">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="top_nav_left">Miễn phí vận chuyển cho đơn hàng trên 1 triệu</div>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <div class="top_nav_right">
+                                <ul class="top_nav_menu">
+
+                                    <!-- Currency / Language / My Account -->
+
+                                   
+                                    <li class="account">
+                                        <a href="#">
+                                            Tài khoản của tôi
+                                            <i class="fa fa-angle-down"></i>
+                                        </a>
+                                        <ul class="account_selection">
+                                            <li><a href="Login.html"><i class="fa fa-sign-in" aria-hidden="true"></i>Đăng nhập</a>
+                                            </li>
+                                            <li><a href="Register.html"><i class="fa fa-user-plus"
+                                                        aria-hidden="true"></i>Đăng ký</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Navigation -->
+
+            <div class="main_nav_container">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 text-right">
+                            <div class="logo_container">
+                                <a href="#">LAPTOP<span>STORE</span></a>
+                            </div>
+                            <nav class="navbar">
+                                <ul class="navbar_menu">
+                                    <li><a href="index.html">trang chủ</a></li>
+                                    <li><a href="thanhvien.html">thành viên</a></li>
+                                    <li><a href="laptop.html">laptop</a></li>
+                                    <li><a href="Phukien.html">phụ kiện</a></li>
+                                    
+                                    <li><a href="contact.html">liên hệ</a></li>
+                                </ul>
+                                <ul class="navbar_user">
+                                    <li>
+                                        <form name="frm-search"method="get" action="timkiem.html">
+                                            <div class="input-container">					
+                                                <input type="text" placeholder="Tìm kiếm" name="words" onkeypress="checkKeySearch(e)">
+                                                <i onclick="doSearch()"></i>
+                                                <i onclick="openCart()"></i>
+                                            </div>
+                                        </form>
+                                    </li>
+                                    <li><a href="tiemkiem.html"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+                                    <li class="checkout">
+                                        <a href="Giohang.html">
+                                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                            <span id="checkout_items" class="checkout_items">0</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="hamburger_container">
+                                    <i class="fa fa-bars" aria-hidden="true"></i>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="wrapper">
+                <div class="register-form">
+                    <form action="" id="form-login">
+                        <h3>Đăng ký tài khoản mới</h3>
+                        <div class="input-box">
+
+                            <input type="text" placeholder="Nhập username">
+                        </div>
+                        <div class="input-box">
+
+                            <input type="password" placeholder="Nhập mật khẩu">
+                        </div>
+                        <div class="input-box">
+                            <div class="col-6">
+                                <label for="ngaysinh">Ngày sinh</label>
+                                <br>
+                                <input type="date" id="ngaysinh" />
+                            </div>
+                            <div class="col-6">
+                                <label for="gioitinh">Giới tính</label>
+                                <br>
+                                <select id="gioitinh">
+                                    <option value="nam">Nam</option>
+                                    <option value="nu">Nữ</option>
+                                </select>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+
+
+
+                        <div class="btn-box">
+                            <button type="submit" onclick="Dangky()">
+                                Đăng ký
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <script>
+                function Dangky() {
+                    
+                    alert("Đăng ký thành công!");
+                }
+                
+        
+            </script>
+        </header>
+    </div>
+    
+    
+    <footer>
+        
+    </footer>
+</body>
+
+</html>

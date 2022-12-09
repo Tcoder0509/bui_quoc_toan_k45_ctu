@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>LAPTOP STORE</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Colo Shop Template">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/png" href="images/logo.jpg" />
+	<link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+	<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+	<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+	<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/animate.css">
+	<link rel="stylesheet" type="text/css" href="styles/main_styles.css">
+	<link rel="stylesheet" type="text/css" href="styles/responsive.css">
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="styles/bootstrap4/popper.js"></script>
+	<script src="styles/bootstrap4/bootstrap.min.js"></script>
+	<script src="plugins/Isotope/isotope.pkgd.min.js"></script>
+	<script src="plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+	<script src="plugins/easing/easing.js"></script>
+	<script src="js/custom.js"></script>
+	<script>
+        //tìm kiếm
+        function checkkeySearch(e){
+            var key=e.which || e.keyCode;
+            if(key == 32 )doSearch(e)
+        }
+        function doSearch(){
+            var frm=document.forms["frm-search"];
+            if(frm.words.value.length>0){
+                frm.sumit();
+            }
+        }
+        function showSearch(){
+            var frm = new URL(window.location);
+            var ws = url.searchParams.get("words");
+            document.getElementById("searchDetail").innerHTML="<h1> tu tim kiem : " + ws +"</h1>"; 
+        }
+
+        var itemList={
+			//laptop
+            "sp001":{"name":"ThinkPad 14 gen 3(Silver)","price":28.690,"photo":"images/thinkpadt14gen3.jpg"},
+            "sp002":{"name":"HP Pavilon 1","price":12.990,"photo":"images/hppavilon1.jpg"},
+            "sp003":{"name":"Acer ASPIRE 3","price":10.190,"photo":"images/3.jpg"},
+            "sp004":{"name":"Acer Premium","price":13.490,"photo":"images/4.jpg"},
+            "sp005":{"name":"HP A4231","price":10.490,"photo":"images/5.jpg"},
+            "sp006":{"name":"Dell XPS 6","price":52.990,"photo":"images/6.jpg"},
+            "sp007":{"name":"Dell XPS 8","price":64.990,"photo":"images/7.jpg"},
+            "sp008":{"name":"Asus ROGStrix 3","price":38.990,"photo":"images/8.jpg"},
+            "sp009":{"name":"Dell Alien Ware 3","price":36.590,"photo":"images/9.jpg"},
+            "sp010":{"name":"HP Pavilon 1","price":17.490,"photo":"images/10.jpg"},
+            "sp011":{"name":"IdeaPad Pro","price":15.690,"photo":"images/11.jpg"},
+            "sp012":{"name":"Dell Alien Ware 1","price":32.590,"photo":"images/12.jpg"},
+			//phukien
+			"sp01":{"name":"Bộ chuột phím không dây S88(Black)","price":300,"photo":"images/phukien1.png"},
+            "sp02":{"name":"Chuột Gaming G403","price":990,"photo":"images/phukien3.png"},
+            "sp03":{"name":"Bàn phím Dareu","price":500,"photo":"images/phukien4.png"},
+            "sp04":{"name":"Balo laptop gaming","price":1.490,"photo":"images/phukien6.png"},
+            "sp05":{"name":"Màn hình AOPEN","price":2.490,"photo":"images/phukien7.png"},
+            "sp06":{"name":"tai nghe gaming Kingston","price":990,"photo":"images/phukien10.png"},
+            "sp07":{"name":"Tai Nghe Beat","price":590,"photo":"images/phukien11.jpg"},
+            "sp08":{"name":"Tai Nghe LG","price":1.990,"photo":"images/phukien13.png"}, 
+            "sp09":{"name":"Tai nghe Gaming ","price":590,"photo":"images/phukien14.png"},
+            "sp10":{"name":"Lót chuột bản lớn","price":390,"photo":"images/phukien16.png"},
+            "sp11":{"name":"Lót chuột nhỏ","price":90,"photo":"images/phukien17.png"},
+            "sp12":{"name":"USB 32GB Kingston","price":90,"photo":"images/phukien1.png"},
+
+        };
+        function addCart(code){
+            var number=parseInt(document.getElementById(code).value);
+            var name=itemList[code].name;
+            if(number==0)
+            return;
+            if(typeof localStorage[code] === "undefined"){
+                window.localStorage.setItem(code,number);
+            }
+            else{
+                var current=parseInt(window.localStorage.getItem(code));
+                if(current+number>100){
+                    window.localStorage.setItem(code,100);
+                    alert("Một sẩn phẩm chỉ có thể đặt tối đa 100 sản phẩm cho một đơn hàng. Bạn đã đặt 100 sản phẩm của "+name+"này");
+                    return;
+                }
+                else{
+                    window.localStorage.setItem(code,current+number);
+                }
+                alert("Đã cập nhật sản phẩm "+name+" với số lượng "+number+"vào giỏ hàng. Số lượng sản phẩm "+name+"đã đặt là "+parseInt(window.localStorage.getItem(code))+".");
+            }
+        }
+        function openCart(){
+            window.localStorage.href="Giohang.html";
+        }
+        function getDiscountRate(){
+            var d=new Date();
+            var weekday=d.getDate();
+            var totalMins=d.getHours()*60+d.getMinutes();
+            if(weekday>1 && weekday<=3 && ((totalMins>=420 && totalMins<=660) || (totalMins>=780 && totalMins<=1020)))
+                return 0.1;
+            return 0;
+        }
+        //hien thi noi dung gio hang
+        function showCart(){
+            var formatter=new Intl.NumberFormat('vi-VN',{style:'currency', currency: 'VND'});
+            var container=document.getElementById("cartDetail").getElementsByTagName('tbody')[0]
+                container.innerHTML="";
+            var sum=0;
+            var totaPreTax=0;
+            var getDiscountRate=getDiscountRate();
+            var taxRate=0.1;
+            var discount=0;
+            var tax=0;
+            for(var i=0;i<Window.localStorage.length;i++){
+                if(typeof itemList[localStorage.key(i)]==="undefined")
+                    continue;
+                var tr=document.createElement("tr");
+                var photoCell=document.createElement("td");
+                var nameCell=document.createElement("td");
+                var priceCell=document.createElement("td");
+                var numberCell=document.createElement("td");
+                var sumCell=document.createElement("td");
+                var removeCell=document.createElement("td");
+                var removeLink=document.createElement("a");
+                var item=itemList[localStorage.key(i)];
+                var number=localStorage.getItem(localStorage.key(i));
+
+                photoCell.style.textAlign="center";
+                photoCell.innerHTML="<img src='"+item.photo+"' class='round-figure' with='100px'/>";
+
+                nameCell.innerHTML=item.name;
+                priceCell.innerHTML=formatter.format(item.price);
+                priceCell.style.textAlign="right";
+
+                numberCell.innerHTML=number;
+                numberCell.style.textAlign="right";
+
+                sum=number*item.price;
+                sumCell.innerHTML=formatter.format(sum);
+                sumCell.style.textAlign="right";
+
+                removeLink.innerHTML="<i class='fa fa-trash'></i>";
+                removeLink.setAttribute("href","#");
+                removeLink.setAttribute("data-code",localStorage.key(i));
+                removeLink.onclick=function(){
+                    removeCart(this.dataset.code);
+                };
+                removeCell.style.textAlign="center";
+                removeCell.appendChild(removeLink);
+
+                tr.appendChild(photoCell);
+                tr.appendChild(nameCell);
+                tr.appendChild(numberCell);
+                tr.appendChild(priceCell);
+                tr.appendChild(sumCell);
+                tr.appendChild(removeCell);
+                container.appendChild(tr);
+                totaPreTax+=sum;
+                var discount=totaPreTax*discountRate;
+                var tax=(totaPreTax-discount)*taxRate;
+                document.getElementById("bill_pre_tax_total").innerHTML=formatter.format(totaPreTax);
+                document.getElementById("bill_discount").innerHTML=discountRate+"x A = "+formatter.format(discount);
+                document.getElementById("bill_tax").innerHTML=formatter.format(tax);
+                document.getElementById("bill_total").innerHTML=formatter.format(totaPreTax-discount+tax);
+            }
+        }
+        //hàm xoa san pham khoi don hang
+        function removeCart(doe){
+            if(typeof window.localStorage[code] !=="undefined"){
+                //xoa san pham
+                window.localStorage.removeItem(code);
+                //xoa noi dung phan than cua bang
+                document.getElementById("carDetail").getElementsByTagName('tbody')[0].innerHTML="";
+                //hien thi lai
+                showCart();
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+	<div class="super_container">
+
+		<!-- Header -->
+
+		<header class="header trans_300">
+
+			<!-- Top Navigation -->
+
+			<div class="top_nav">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="top_nav_left">Miễn phí vận chuyển cho đơn hàng trên 1 triệu</div>
+						</div>
+						<div class="col-md-6 text-right">
+							<div class="top_nav_right">
+								<ul class="top_nav_menu">
+
+									<!-- Currency / Language / My Account -->
+
+									
+									<li class="account">
+										<a href="#">
+											Tài khoản của tôi
+											<i class="fa fa-angle-down"></i>
+										</a>
+										<ul class="account_selection">
+											<li><a href="Login.html"><i class="fa fa-sign-in"
+														aria-hidden="true"></i>Đăng nhập</a>
+											</li>
+											<li><a href="Register.html"><i class="fa fa-user-plus"
+														aria-hidden="true"></i>Đăng ký</a></li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Main Navigation -->
+
+			<div class="main_nav_container">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12 text-right">
+							<div class="logo_container">
+								<a href="#">LAPTOP<span>STORE</span></a>
+							</div>
+							<nav class="navbar">
+								<ul class="navbar_menu">
+									<li><a href="index.html">trang chủ</a></li>
+									<li><a href="thanhvien.html">thành viên</a></li>
+									<li><a href="laptop.html">laptop</a></li>
+									<li><a href="Phukien.html">phụ kiện</a></li>
+									
+									<li><a href="contact.html">liên hệ</a></li>
+								</ul>
+								<ul class="navbar_user">
+									<li>
+										<input type="text" class="fa-search" placeholder="Tìm kiếm">
+									</li>
+									<li>
+										<a href="#"><i class="fa fa-search" aria-hidden="true"></i></a>
+									</li>
+									<li class="checkout">
+										<a href="Giohang.html">
+											<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+											<span id="checkout_items" class="checkout_items">0</span>
+										</a>
+									</li>
+								</ul>
+								<div class="hamburger_container">
+									<i class="fa fa-bars" aria-hidden="true"></i>
+								</div>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</header>
+
+		
+
+		<!-- Slider -->
+
+		<div class="main_slider" style="background-image:url(images/bannerlaptop.jpg)"></div>
+
+		<!-- Banner -->
+
+		
+
+		<!-- New Arrivals -->
+
+		<div class="new_arrivals">
+			<div class="container">
+				<div class="row">
+					<div class="col text-center">
+						<div class="section_title new_arrivals_title">
+							<h2></h2>
+						</div>
+					</div>
+				</div>
+				<div class="row align-items-center">
+
+				</div>
+				<div class="row">
+					<div class="col">
+						<div class="product-grid"
+							data-isotope='{ "itemSelector": ".product-item", "layoutMode": "fitRows" }'>
+
+							<!-- Product 1 -->
+
+							<div class="product-item men">
+								<div class="product discount product_filter">
+									<div class="product_image">
+										<img src="images/thinkpadt14gen3.jpg" alt="">
+									</div>
+									<div class="favorite favorite_left"></div>
+									<div
+										class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center">
+										<span></span>
+									</div>
+									<div class="product_info">
+										<h6 class="product_name"><a href="single.html">ThinkPad 14 gen 3(Silver)</a>
+										</h6>
+										<div class="product_price">28.690.000VND</div>
+									</div>
+									<span>Số lượng: <input type="number" max="100" min="0" value="0" size="3" onkeydown="return flase"></span>
+								</div>
+								<div class="red_button add_to_cart_button"><a href="Giohang.html" onclick="addCart('sp007')">thêm vào giỏ hàng</a></div>
+							</div>
+
+							<!-- Product 2 -->
+
+							<div class="product-item women">
+								<div class="product product_filter">
+									<div class="product_image">
+										<img src="images/hppavilon1.jpg" alt="">
+									</div>
+									<div class="favorite"></div>
+									<div
+										class="product_bubble product_bubble_left product_bubble_green d-flex flex-column align-items-center">
+										<span>new</span>
+									</div>
+									<div class="product_info">
+										<h6 class="product_name"><a href="single.html">HP Pavilon 1</a></h6>
+										<div class="product_price">12.990.000VND</div>
+									</div>
+									<span>Số lượng: <input type="number" max="100" min="0" value="0" size="3" onkeydown="return flase"></span>
+								</div>
+								<div class="red_button add_to_cart_button"><a href="Giohang.html" onclick="addCart('sp007')">thêm vào giỏ hàng</a></div>
+							</div>
+
+							<!-- Product 3 -->
+
+							<div class="product-item women">
+								<div class="product product_filter">
+									<div class="product_image">
+										<img src="images/3.jpg" alt="">
+									</div>
+									<div class="favorite"></div>
+									<div class="product_info">
+										<h6 class="product_name"><a href="single.html">Acer ASPIRE 3</a></h6>
+										<div class="product_price">10.190.000VND</div>
+									</div>
+									<span>Số lượng: <input type="number" max="100" min="0" value="0" size="3" onkeydown="return flase"></span>
+								</div>
+								<div class="red_button add_to_cart_button"><a href="Giohang.html" onclick="addCart('sp007')">thêm vào giỏ hàng</a></div>
+							</div>
+
+							<!-- Product 4 -->
+
+							<div class="product-item accessories">
+								<div class="product product_filter">
+									<div class="product_image">
+										<img src="images/4.jpg" alt="">
+									</div>
+									<div
+										class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center">
+										<span>sale</span>
+									</div>
+									<div class="favorite favorite_left"></div>
+									<div class="product_info">
+										<h6 class="product_name"><a href="single.html">Acer Premium</a></h6>
+										<div class="product_price">13.490.000VND</div>
+									</div>
+									<span>Số lượng: <input type="number" max="100" min="0" value="0" size="3" onkeydown="return flase"></span>
+								</div>
+								<div class="red_button add_to_cart_button"><a href="Giohang.html" onclick="addCart('sp007')">thêm vào giỏ hàng</a></div>
+							</div>
+
+							<!-- Product 5 -->
+
+							<div class="product-item women men">
+								<div class="product product_filter">
+									<div class="product_image">
+										<img src="images/5.jpg" alt="">
+									</div>
+									<div class="favorite"></div>
+									<div class="product_info">
+										<h6 class="product_name"><a href="single.html">HP A4231</a></h6>
+										<div class="product_price">10.490.000VND</div>
+									</div>
+									<span>Số lượng: <input type="number" max="100" min="0" value="0" size="3" onkeydown="return flase"></span>
+								</div>
+								<div class="red_button add_to_cart_button"><a href="Giohang.html" onclick="addCart('sp007')">thêm vào giỏ hàng</a></div>
+							</div>
+
+							<!-- Product 6 -->
+
+							<div class="product-item accessories">
+								<div class="product discount product_filter">
+									<div class="product_image">
+										<img src="images/phukien1.png" alt="">
+									</div>
+									<div class="favorite favorite_left"></div>
+									<div
+										class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center">
+										<span></span>
+									</div>
+									<div class="product_info">
+										<h6 class="product_name"><a href="#single.html">Bộ phím chuột không dây</a>
+										</h6>
+										<div class="product_price">300.000VND<span></span></div>
+									</div>
+									<span>Số lượng: <input type="number" max="100" min="0" value="0" size="3" onkeydown="return flase"></span>
+								</div>
+								<div class="red_button add_to_cart_button"><a href="Giohang.html" onclick="addCart('sp007')">thêm vào giỏ hàng</a></div>
+							</div>
+
+							<!-- Product 7 -->
+
+							<div class="product-item women">
+								<div class="product product_filter">
+									<div class="product_image">
+										<img src="images/phukien3.jpg" alt="">
+									</div>
+									<div class="favorite"></div>
+									<div class="product_info">
+										<h6 class="product_name"><a href="single.html">Chuột có dây logitech G402</a>
+										</h6>
+										<div class="product_price">599.000VND</div>
+									</div>
+									<span>Số lượng: <input type="number" max="100" min="0" value="0" size="3" onkeydown="return flase"></span>
+								</div>
+								<div class="red_button add_to_cart_button"><a href="Giohang.html" onclick="addCart('sp007')">thêm vào giỏ hàng</a></div>
+							</div>
+
+							<!-- Product 8 -->
+
+							<div class="product-item accessories">
+								<div class="product product_filter">
+									<div class="product_image">
+										<img src="images/phukien4.jpg" alt="">
+									</div>
+									<div class="favorite"></div>
+									<div class="product_info">
+										<h6 class="product_name"><a href="single.html">Bàn phím Dareu Pro</a></h6>
+										<div class="product_price">500.000VND</div>
+									</div>
+									<span>Số lượng: <input type="number" max="100" min="0" value="0" size="3" onkeydown="return flase"></span>
+								</div>
+								<div class="red_button add_to_cart_button"><a href="Giohang.html" onclick="addCart('sp007')">thêm vào giỏ hàng</a></div>
+							</div>
+
+							<!-- Product 9 -->
+
+							<div class="product-item men">
+								<div class="product product_filter">
+									<div class="product_image">
+										<img src="images/phukien7.jpg" alt="">
+									</div>
+									<div
+										class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center">
+										<span>sale</span>
+									</div>
+									<div class="favorite favorite_left"></div>
+									<div class="product_info">
+										<h6 class="product_name"><a href="single.html">Màn hình AOPEN 23inch</a></h6>
+										<div class="product_price">2.500.000VND</div>
+									</div>
+									<span>Số lượng: <input type="number" max="100" min="0" value="0" size="3" onkeydown="return flase"></span>
+								</div>
+								<div class="red_button add_to_cart_button"><a href="Giohang.html" onclick="addCart('sp007')">thêm vào giỏ hàng</a></div>
+							</div>
+
+							<!-- Product 10 -->
+
+							<div class="product-item men">
+								<div class="product product_filter">
+									<div class="product_image">
+										<img src="images/phukien6.jpg" alt="">
+									</div>
+									<div class="favorite"></div>
+									<div class="product_info">
+										<h6 class="product_name"><a href="single.html">Balo laptop gaming</a></h6>
+										<div class="product_price">1.290.000VND</div>
+									</div>
+									<span>Số lượng: <input type="number" max="100" min="0" value="0" size="3" onkeydown="return flase"></span>
+								</div>
+								<div class="red_button add_to_cart_button"><a href="Giohang.html" onclick="addCart('sp007')">thêm vào giỏ hàng</a></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Deal of the week -->
+
+		<div class="deal_ofthe_week">
+			<div class="container">
+				<div class="row align-items-center">
+					<div class="col-lg-6">
+						<div class="deal_ofthe_week_img">
+							<img src="images/banner5.jpg" alt="">
+						</div>
+					</div>
+					<div class="col-lg-6 text-right deal_ofthe_week_col">
+						<div class="deal_ofthe_week_content d-flex flex-column align-items-center float-right">
+							<div class="section_title">
+								<h2>Giao dịch trong tuần</h2>
+							</div>
+							<ul class="timer">
+								<li class="d-inline-flex flex-column justify-content-center align-items-center">
+									<div id="day" class="timer_num">03</div>
+									<div class="timer_unit">Ngày</div>
+								</li>
+								<li class="d-inline-flex flex-column justify-content-center align-items-center">
+									<div id="hour" class="timer_num">15</div>
+									<div class="timer_unit">Giờ</div>
+								</li>
+								<li class="d-inline-flex flex-column justify-content-center align-items-center">
+									<div id="minute" class="timer_num">45</div>
+									<div class="timer_unit">Phút</div>
+								</li>
+								<li class="d-inline-flex flex-column justify-content-center align-items-center">
+									<div id="second" class="timer_num">23</div>
+									<div class="timer_unit">Giây</div>
+								</li>
+							</ul>
+							<div class="red_button deal_ofthe_week_button"><a href="#">Mua ngay</a></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Best Sellers -->
+
+		<div class="best_sellers">
+			<div class="container">
+				<div class="row">
+					<div class="col text-center">
+						<div class="section_title new_arrivals_title">
+							<h2>Bán chạy nhất</h2>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<div class="product_slider_container">
+							<div class="owl-carousel owl-theme product_slider">
+
+								<!-- Slide 1 -->
+
+								<div class="owl-item product_slider_item">
+									<div class="product-item">
+										<div class="product discount">
+											<div class="product_image">
+												<img src="images/3.jpg" alt="">
+											</div>
+											<div class="favorite favorite_left"></div>
+											<div
+												class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center">
+												<span></span>
+											</div>
+											<div class="product_info">
+												<h6 class="product_name"><a href="single.html">Acer ASPIRE 3(Silver)</a>
+												</h6>
+												<div class="product_price">10.190.000VND<span></span></div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Slide 2 -->
+
+								<div class="owl-item product_slider_item">
+									<div class="product-item women">
+										<div class="product">
+											<div class="product_image">
+												<img src="images/4.jpg" alt="">
+											</div>
+											<div class="favorite"></div>
+											<div
+												class="product_bubble product_bubble_left product_bubble_green d-flex flex-column align-items-center">
+												<span>new</span>
+											</div>
+											<div class="product_info">
+												<h6 class="product_name"><a href="single.html">Acer Premium</a></h6>
+												<div class="product_price">13.490.000VND</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Slide 3 -->
+
+								<div class="owl-item product_slider_item">
+									<div class="product-item women">
+										<div class="product">
+											<div class="product_image">
+												<img src="images/5.jpg" alt="">
+											</div>
+											<div class="favorite"></div>
+											<div class="product_info">
+												<h6 class="product_name"><a href="single.html">HP A423</a></h6>
+												<div class="product_price">10.490.000VND</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Slide 4 -->
+
+								<div class="owl-item product_slider_item">
+									<div class="product-item accessories">
+										<div class="product">
+											<div class="product_image">
+												<img src="images/6.jpg" alt="">
+											</div>
+											<div
+												class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center">
+												<span>sale</span>
+											</div>
+											<div class="favorite favorite_left"></div>
+											<div class="product_info">
+												<h6 class="product_name"><a href="single.html">Dell XPS 3</a></h6>
+												<div class="product_price">52.990.000VND</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Slide 5 -->
+
+								<div class="owl-item product_slider_item">
+									<div class="product-item women men">
+										<div class="product">
+											<div class="product_image">
+												<img src="images/phukien1.png" alt="">
+											</div>
+											<div class="favorite"></div>
+											<div class="product_info">
+												<h6 class="product_name"><a href="single.html">Phím chuột không dây
+														S88</a></h6>
+												<div class="product_price">300.000VND</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Slide 6 -->
+
+								<div class="owl-item product_slider_item">
+									<div class="product-item accessories">
+										<div class="product discount">
+											<div class="product_image">
+												<img src="images/phukien4.jpg" alt="">
+											</div>
+											<div class="favorite favorite_left"></div>
+											<div
+												class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center">
+												<span></span>
+											</div>
+											<div class="product_info">
+												<h6 class="product_name"><a href="single.html">Bàn phím Dareu 990</a>
+												</h6>
+												<div class="product_price">500.000VND<span></span></div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Slide 7 -->
+
+								<div class="owl-item product_slider_item">
+									<div class="product-item women">
+										<div class="product">
+											<div class="product_image">
+												<img src="images/phukien6.jpg" alt="">
+											</div>
+											<div class="favorite"></div>
+											<div class="product_info">
+												<h6 class="product_name"><a href="single.html">Balo laptop gaming</a>
+												</h6>
+												<div class="product_price">1.290.000VND</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+							</div>
+
+							<!-- Slider Navigation -->
+
+							<div
+								class="product_slider_nav_left product_slider_nav d-flex align-items-center justify-content-center flex-column">
+								<i class="fa fa-chevron-left" aria-hidden="true"></i>
+							</div>
+							<div
+								class="product_slider_nav_right product_slider_nav d-flex align-items-center justify-content-center flex-column">
+								<i class="fa fa-chevron-right" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Benefit -->
+
+		<div class="benefit">
+			<div class="container">
+				<div class="row benefit_row">
+					<div class="col-lg-3 benefit_col">
+						<div class="benefit_item d-flex flex-row align-items-center">
+							<div class="benefit_icon"><i class="fa fa-truck" aria-hidden="true"></i></div>
+							<div class="benefit_content">
+								<h6>Miễn phí ship</h6>
+								<p>cho một số hình thức</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 benefit_col">
+						<div class="benefit_item d-flex flex-row align-items-center">
+							<div class="benefit_icon"><i class="fa fa-money" aria-hidden="true"></i></div>
+							<div class="benefit_content">
+								<h6>Thanh toán khi nhận hàng</h6>
+								<p></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 benefit_col">
+						<div class="benefit_item d-flex flex-row align-items-center">
+							<div class="benefit_icon"><i class="fa fa-undo" aria-hidden="true"></i></div>
+							<div class="benefit_content">
+								<h6>45 ngày đổi trả</h6>
+								<p></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 benefit_col">
+						<div class="benefit_item d-flex flex-row align-items-center">
+							<div class="benefit_icon"><i class="fa fa-clock-o" aria-hidden="true"></i></div>
+							<div class="benefit_content">
+								<h6>Vào tất cả các ngày trong tuần</h6>
+								<p>8AM - 09PM</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Blogs -->
+
+		<div class="blogs">
+			<div class="container">
+				<div class="row">
+					<div class="col text-center">
+						<div class="section_title">
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<!-- Newsletter -->
+
+		<div class="newsletter">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-6">
+						<div
+							class="newsletter_text d-flex flex-column justify-content-center align-items-lg-start align-items-md-center text-center">
+							<h4>Bản tin</h4>
+							<p>Đăng ký nhận bản tin của chúng tôi và được giảm giá 20% cho lần mua hàng đầu tiên của bạn
+							</p>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<form action="post">
+							<div
+								class="newsletter_form d-flex flex-md-row flex-column flex-xs-column align-items-center justify-content-lg-end justify-content-center">
+								<input id="newsletter_email" type="email" placeholder="email của bạn" required="required"
+									data-error="Valid email is required.">
+								<button id="newsletter_submit" type="submit" class="newsletter_submit_btn trans_300"
+									value="Submit">Đăng ký ngay</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+
+	</div>
+
+	
+</body>
+<!-- Footer -->
+
+<footer class="footer">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6">
+				<div
+					class="footer_nav_container d-flex flex-sm-row flex-column align-items-center justify-content-lg-start justify-content-center text-center">
+					<ul class="footer_nav">
+						<li>
+							<p>B1905854</p>
+							<p>B1905967</p>
+							<p>B1905979</p>
+							<p>B1907014</p>
+							<p>B2011657</p>
+						</li>
+						<li><a href="#">Về đầu trang</a></li>
+						
+					</ul>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div
+					class="footer_social d-flex flex-row align-items-center justify-content-lg-end justify-content-center">
+					<ul>
+						 <li><a href="https://vi-vn.facebook.com/"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+				<li><a href="https://twitter.com/?lang=vi"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+				<li><a href="https://www.instagram.com/"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+				<li><a href="https://www.skype.com/en/"><i class="fa fa-skype" aria-hidden="true"></i></a></li>
+				<li><a href="https://www.pinterest.com/"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+
+			</div>
+		</div>
+	</div>
+</footer>
+</html>
